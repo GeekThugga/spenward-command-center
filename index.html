@@ -370,6 +370,11 @@ header{
           <span class="client-name">Thermal Exchange</span>
           <span class="client-status-tag" style="background:rgba(255,160,64,0.1);color:var(--amber);">DBA · Summer</span>
         </div>
+        <div class="client-item" onclick="window.open('https://geekthugga.github.io/curated-kw-legacy','_blank')" style="cursor:pointer;">
+          <div class="client-dot" style="background:var(--blue2);"></div>
+          <span class="client-name">Curated KW Legacy</span>
+          <span class="client-status-tag" style="background:rgba(77,170,255,0.1);color:var(--blue2);">Portal</span>
+        </div>
       </div>
       <div class="sb-section">
         <div class="sb-title">SDG Tech Stack</div>
@@ -739,6 +744,20 @@ const CLIENTS={
       {done:false,text:'Summer 2026 campaign launch'},
     ]
   },
+    curated:{
+    id:'curated',icon:'🏠',name:'Curated KW Legacy',type:'Curated Partners · KW Legacy Real Estate Portal',
+    status:'active',badge:'ACTIVE · PORTAL',badgeClass:'badge-active',
+    mrr:'$2,750',pct:70,color:'var(--blue2)',
+    tasks:[
+      {done:true,text:'Curated Partners portal built'},
+      {done:true,text:'KW Legacy branding applied'},
+      {done:true,text:'Roadmap + milestones built'},
+      {done:true,text:'Task board live'},
+      {done:false,active:true,text:'Website tracker integration'},
+      {done:false,text:'Meeting notes system'},
+      {done:false,text:'Full client handoff'},
+    ]
+  },
   legacymortgage:{
     id:'legacymortgage',icon:'🏦',name:'Legacy Mutual Mortgage',type:'Mortgage Services · Inactive — Watch',
     status:'inactive',badge:'INACTIVE',badgeClass:'badge-prev',
@@ -888,7 +907,7 @@ function renderDashboard(){
 function renderAllClients(){
   const grid=document.getElementById('allClientGrid');
   if(grid.innerHTML) return;
-  const SDG_IDS=['roofnation','growco','thermal'];
+  const SDG_IDS=['roofnation','growco','thermal','curated'];
   const clients=Object.values(CLIENTS).filter(c=>!SDG_IDS.includes(c.id));
   const sdg=Object.values(CLIENTS).filter(c=>SDG_IDS.includes(c.id));
   // Client cards

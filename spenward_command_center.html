@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCSD — Spenward Development Group Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --navy:#050B1A;
+  --navy2:#080F22;
+  --navy3:#0D1530;
+  --card:#0F1B38;
+  --card2:#152040;
+  --border:rgba(255,255,255,0.06);
+  --border2:rgba(255,255,255,0.12);
+  --blue:#1A8FFF;
+  --blue2:#4DAAFF;
+  --blue3:#0066CC;
+  --white:#F0F4FF;
+  --white2:#A0AECF;
+  --white3:#5060A0;
+  --gold:#FFB800;
+  --green:#00D68F;
+  --red:#FF4455;
+  --amber:#FFA040;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Outfit',sans-serif;
+}
+
+body{font-family:var(--sans);background:var(--navy);color:var(--white);min-height:100vh;overflow-x:hidden;}
+
+/* Background */
+.bg{position:fixed;inset:0;z-index:0;overflow:hidden;}
+.bg-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(26,143,255,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(26,143,255,0.04) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+.bg-glow1{position:absolute;width:800px;height:800px;background:radial-gradient(circle,rgba(26,143,255,0.08) 0%,transparent 70%);top:-300px;left:-200px;}
+.bg-glow2{position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(26,143,255,0.05) 0%,transparent 70%);bottom:-200px;right:-100px;}
+.bg-line{position:absolute;top:0;left:50%;width:1px;height:100%;background:linear-gradient(to bottom,transparent,rgba(26,143,255,0.1),transparent);}
+
+.app{position:relative;z-index:1;display:flex;flex-direction:column;min-height:100vh;}
+
+/* HEADER */
+header{
+  height:64px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;background:rgba(5,11,26,0.9);backdrop-filter:blur(20px);
+  position:sticky;top:0;z-index:100;
+}
+.logo-wrap img{height:36px;object-fit:contain;}
+.header-center{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,0.03);border:1px solid var(--border);
+  border-radius:8px;padding:4px;
+}
+.nav-btn{
+  padding:6px 14px;border-radius:6px;border:none;cursor:pointer;
+  font-size:12px;font-weight:600;font-family:var(--sans);
+  color:var(--white2);background:transparent;transition:all 0.2s;
+}
+.nav-btn.active{background:var(--blue);color:white;}
+.nav-btn:hover:not(.active){background:rgba(255,255,255,0.06);color:var(--white);}
+.header-right{display:flex;align-items:center;gap:12px;}
+.team-badges{display:flex;gap:6px;}
+.team-badge{
+  width:30px;height:30px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:11px;font-weight:700;cursor:default;
+}
+.status-pill{
+  display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;
+  color:var(--blue2);background:rgba(26,143,255,0.08);
+  border:1px solid rgba(26,143,255,0.2);padding:5px 12px;border-radius:20px;
+  font-family:var(--mono);
+}
+.pulse{width:5px;height:5px;background:var(--blue);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(26,143,255,0.5);}50%{box-shadow:0 0 0 6px rgba(26,143,255,0);opacity:0.7;}}
+
+/* MAIN */
+.main{display:grid;grid-template-columns:240px 1fr;flex:1;}
+
+/* SIDEBAR */
+.sidebar{border-right:1px solid var(--border);padding:20px 0;background:rgba(8,15,34,0.6);}
+.sb-section{margin-bottom:20px;}
+.sb-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--white3);padding:0 16px;margin-bottom:8px;font-family:var(--mono);}
+.sb-item{
+  display:flex;align-items:center;gap:10px;padding:9px 16px;
+  cursor:pointer;transition:all 0.15s;border-left:2px solid transparent;
+  font-size:12px;font-weight:500;color:var(--white2);text-decoration:none;
+}
+.sb-item:hover{background:rgba(26,143,255,0.05);color:var(--white);}
+.sb-item.active{background:rgba(26,143,255,0.08);border-left-color:var(--blue);color:var(--white);}
+.sb-icon{font-size:14px;width:20px;text-align:center;}
+
+/* CLIENT ITEMS */
+.client-item{
+  display:flex;align-items:center;gap:10px;padding:8px 16px;
+  cursor:pointer;transition:all 0.15s;
+}
+.client-item:hover{background:rgba(255,255,255,0.03);}
+.client-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.client-name{font-size:12px;color:var(--white2);flex:1;}
+.client-status-tag{font-size:9px;font-family:var(--mono);padding:2px 6px;border-radius:4px;}
+
+/* CONTENT */
+.content{overflow-y:auto;padding:28px;}
+.page{display:none;}
+.page.active{display:block;}
+
+/* STAT CARDS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;}
+.stat{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:18px;position:relative;overflow:hidden;
+}
+.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent,var(--blue));}
+.stat.b{--accent:var(--blue);}
+.stat.g{--accent:var(--green);}
+.stat.r{--accent:var(--red);}
+.stat.a{--accent:var(--amber);}
+.stat-label{font-size:10px;color:var(--white3);text-transform:uppercase;letter-spacing:1px;font-family:var(--mono);margin-bottom:8px;}
+.stat-val{font-size:30px;font-weight:800;letter-spacing:-1px;}
+.stat-val.b{color:var(--blue2);}
+.stat-val.g{color:var(--green);}
+.stat-val.r{color:var(--red);}
+.stat-val.a{color:var(--amber);}
+.stat-sub{font-size:11px;color:var(--white3);margin-top:4px;}
+
+/* SECTION HEADER */
+.sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.sec-title{font-size:14px;font-weight:800;display:flex;align-items:center;gap:8px;}
+.sec-title span{color:var(--white3);font-weight:500;}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;transition:all 0.2s;}
+.card:hover{border-color:var(--border2);}
+
+/* CLIENT CARDS GRID */
+.clients-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;}
+.client-card{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:20px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;
+}
+.client-card:hover{border-color:rgba(26,143,255,0.3);transform:translateY(-2px);}
+.client-card.selected{border-color:var(--blue);}
+.client-card.delinquent{border-color:rgba(255,68,85,0.3);}
+.cc-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;}
+.cc-icon{font-size:22px;}
+.cc-badge{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;padding:3px 9px;border-radius:8px;font-family:var(--mono);}
+.badge-active{background:rgba(0,214,143,0.1);color:var(--green);border:1px solid rgba(0,214,143,0.2);}
+.badge-pipeline{background:rgba(26,143,255,0.1);color:var(--blue2);border:1px solid rgba(26,143,255,0.2);}
+.badge-delinquent{background:rgba(255,68,85,0.1);color:var(--red);border:1px solid rgba(255,68,85,0.2);}
+.badge-prev{background:rgba(255,160,64,0.1);color:var(--amber);border:1px solid rgba(255,160,64,0.2);}
+.cc-name{font-size:15px;font-weight:800;margin-bottom:3px;}
+.cc-type{font-size:11px;color:var(--white3);margin-bottom:12px;}
+.prog-row{display:flex;justify-content:space-between;font-size:10px;color:var(--white2);margin-bottom:5px;font-family:var(--mono);}
+.prog-bar{height:3px;background:rgba(255,255,255,0.06);border-radius:2px;margin-bottom:12px;}
+.prog-fill{height:100%;border-radius:2px;transition:width 1s cubic-bezier(0.34,1.56,0.64,1);}
+.task-preview{display:flex;flex-direction:column;gap:4px;}
+.task-row{display:flex;align-items:center;gap:7px;font-size:11px;}
+.task-icon{font-size:10px;width:12px;flex-shrink:0;}
+
+/* PIPELINE */
+.pipeline-table{width:100%;border-collapse:collapse;}
+.pipeline-table th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--white3);padding:8px 12px;text-align:left;font-family:var(--mono);border-bottom:1px solid var(--border);}
+.pipeline-table td{padding:12px;border-bottom:1px solid var(--border);font-size:12px;vertical-align:middle;}
+.pipeline-table tr:hover td{background:rgba(255,255,255,0.02);}
+
+/* SERVICES */
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.service-card{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.svc-name{font-size:13px;font-weight:700;margin-bottom:4px;}
+.svc-price{font-size:15px;font-weight:800;color:var(--blue2);margin-bottom:6px;font-family:var(--mono);}
+.svc-desc{font-size:11px;color:var(--white3);line-height:1.5;}
+
+/* LEAD GEN LUXE */
+.lgl-search{display:flex;gap:10px;margin-bottom:20px;}
+.lgl-input{
+  flex:1;padding:11px 16px;background:var(--card2);border:1px solid var(--border2);
+  border-radius:10px;color:var(--white);font-family:var(--sans);font-size:13px;outline:none;
+}
+.lgl-input:focus{border-color:var(--blue);}
+.lgl-btn{
+  padding:11px 20px;background:var(--blue);border:none;border-radius:10px;
+  color:white;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--sans);
+  transition:all 0.2s;white-space:nowrap;
+}
+.lgl-btn:hover{background:var(--blue2);}
+.lgl-results{display:flex;flex-direction:column;gap:8px;}
+.lgl-result{
+  background:var(--card2);border:1px solid var(--border);border-radius:10px;
+  padding:14px;display:flex;align-items:center;justify-content:space-between;
+  animation:slide-in 0.3s ease;
+}
+@keyframes slide-in{from{opacity:0;transform:translateX(-10px);}to{opacity:1;transform:translateX(0);}}
+.lgl-biz{flex:1;}
+.lgl-biz-name{font-size:13px;font-weight:700;margin-bottom:2px;}
+.lgl-biz-info{font-size:11px;color:var(--white3);}
+.lgl-push{padding:6px 14px;background:transparent;border:1px solid var(--blue);border-radius:8px;color:var(--blue2);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--sans);transition:all 0.2s;}
+.lgl-push:hover{background:var(--blue);color:white;}
+.lgl-status{font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:4px;margin-left:8px;}
+
+/* TASKS */
+.task-list{display:flex;flex-direction:column;gap:6px;}
+.task-item{
+  display:flex;align-items:center;gap:10px;padding:10px 14px;
+  background:var(--card2);border-radius:8px;border:1px solid var(--border);
+  transition:all 0.15s;cursor:pointer;
+}
+.task-item:hover{border-color:var(--border2);}
+.task-check{
+  width:18px;height:18px;border-radius:4px;border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-size:10px;transition:all 0.2s;
+}
+.task-check.done{background:var(--green);border-color:var(--green);color:#000;}
+.task-check.active{background:var(--blue);border-color:var(--blue);color:white;}
+.task-text{font-size:12px;flex:1;}
+.task-owner{font-size:10px;font-family:var(--mono);padding:2px 7px;border-radius:4px;background:rgba(26,143,255,0.1);color:var(--blue2);}
+
+/* DETAIL PANEL */
+.detail-panel{
+  position:fixed;right:0;top:64px;bottom:0;width:400px;
+  background:var(--navy2);border-left:1px solid var(--border);
+  transform:translateX(100%);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  z-index:200;overflow-y:auto;padding:24px;
+}
+.detail-panel.open{transform:translateX(0);}
+.dp-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--white2);cursor:pointer;font-size:18px;}
+
+
+/* KANBAN */
+.kanban-board{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:4px;}
+.kanban-col{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;min-height:400px;}
+.kanban-col-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.kanban-col-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:var(--mono);}
+.kanban-count{font-size:10px;font-family:var(--mono);padding:2px 7px;border-radius:10px;background:rgba(255,255,255,0.06);}
+.kanban-card{
+  background:var(--card2);border:1px solid var(--border);border-radius:10px;
+  padding:12px;margin-bottom:8px;cursor:grab;transition:all 0.2s;
+  position:relative;
+}
+.kanban-card:hover{border-color:var(--border2);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.3);}
+.kanban-card.dragging{opacity:0.5;cursor:grabbing;}
+.kanban-col.drag-over{background:rgba(26,143,255,0.05);border-color:rgba(26,143,255,0.3);}
+.kc-client{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--blue2);font-family:var(--mono);margin-bottom:5px;}
+.kc-task{font-size:12px;font-weight:600;margin-bottom:8px;line-height:1.4;}
+.kc-footer{display:flex;align-items:center;justify-content:space-between;}
+.kc-assignee{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;}
+.kc-priority{font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;font-family:var(--mono);}
+.priority-high{background:rgba(255,68,85,0.1);color:var(--red);}
+.priority-med{background:rgba(255,160,64,0.1);color:var(--amber);}
+.priority-low{background:rgba(0,214,143,0.1);color:var(--green);}
+.kanban-filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+.kf-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--white2);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--sans);transition:all 0.15s;}
+.kf-btn.active{background:var(--blue);border-color:var(--blue);color:white;}
+.kf-btn:hover:not(.active){background:rgba(255,255,255,0.05);}
+.add-task-btn{width:100%;padding:8px;border:1px dashed var(--border2);border-radius:8px;background:transparent;color:var(--white3);font-size:11px;cursor:pointer;font-family:var(--sans);transition:all 0.15s;margin-top:4px;}
+.add-task-btn:hover{border-color:var(--blue);color:var(--blue2);}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+
+@media(max-width:900px){
+  .main{grid-template-columns:1fr;}
+  .sidebar{display:none;}
+  .clients-grid,.stats-row,.services-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="bg"><div class="bg-grid"></div><div class="bg-glow1"></div><div class="bg-glow2"></div><div class="bg-line"></div></div>
+
+<div class="app">
+  <header>
+    <div class="logo-wrap">
+      <img src="data:image/png;base64,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" alt="Spenward Development Group">
+    </div>
+    <div class="header-center">
+      <button class="nav-btn active" onclick="switchPage('dashboard',this)">Dashboard</button>
+      <button class="nav-btn" onclick="switchPage('clients',this)">Clients</button>
+      <button class="nav-btn" onclick="switchPage('pipeline',this)">Pipeline</button>
+      <button class="nav-btn" onclick="switchPage('services',this)">Services</button>
+      <button class="nav-btn" onclick="switchPage('lgl',this)">Lead Gen Luxe</button>
+      <button class="nav-btn" onclick="switchPage('tasks',this)">Team Tasks</button>
+      <button class="nav-btn" onclick="switchPage('kanban',this)">Task Board</button>
+    </div>
+    <div class="header-right">
+      <div class="team-badges">
+        <div class="team-badge" style="background:rgba(26,143,255,0.2);color:var(--blue2);" title="Tony Edwards">TE</div>
+        <div class="team-badge" style="background:rgba(0,214,143,0.2);color:var(--green);" title="Bryant Spencer">BS</div>
+      </div>
+      <div class="status-pill"><div class="pulse"></div>CCSD · Active</div>
+    </div>
+  </header>
+
+  <div class="main">
+    <aside class="sidebar">
+      <div class="sb-section">
+        <div class="sb-title">Navigation</div>
+        <div class="sb-item active" onclick="switchPage('dashboard',this)"><span class="sb-icon">📊</span>Dashboard</div>
+        <div class="sb-item" onclick="switchPage('clients',this)"><span class="sb-icon">🏢</span>Clients</div>
+        <div class="sb-item" onclick="switchPage('pipeline',this)"><span class="sb-icon">💰</span>Pipeline</div>
+        <div class="sb-item" onclick="switchPage('services',this)"><span class="sb-icon">📦</span>Services</div>
+        <div class="sb-item" onclick="switchPage('lgl',this)"><span class="sb-icon">🔍</span>Lead Gen Luxe</div>
+        <div class="sb-item" onclick="switchPage('tasks',this)"><span class="sb-icon">✅</span>Team Tasks</div>
+        <div class="sb-item" onclick="switchPage('kanban',this)"><span class="sb-icon">📋</span>Task Board</div>
+      </div>
+      <div class="sb-section">
+        <div class="sb-title">Clients</div>
+        <div class="client-item" onclick="switchPage('clients',null);setTimeout(()=>openClientDetail('kwlegacy'),100)">
+          <div class="client-dot" style="background:var(--green);"></div>
+          <span class="client-name">KW Legacy</span>
+          <span class="client-status-tag" style="background:rgba(0,214,143,0.1);color:var(--green);">Active</span>
+        </div>
+        <div class="client-item" onclick="switchPage('clients',null);setTimeout(()=>openClientDetail('aone'),100)">
+          <div class="client-dot" style="background:var(--green);"></div>
+          <span class="client-name">A-One Facility</span>
+          <span class="client-status-tag" style="background:rgba(0,214,143,0.1);color:var(--green);">Active</span>
+        </div>
+        <div class="client-item" onclick="switchPage('clients',null);setTimeout(()=>openClientDetail('cfm'),100)">
+          <div class="client-dot" style="background:var(--green);"></div>
+          <span class="client-name">CFM Security</span>
+          <span class="client-status-tag" style="background:rgba(0,214,143,0.1);color:var(--green);">Active</span>
+        </div>
+        <div class="client-item" onclick="switchPage('clients',null);setTimeout(()=>openClientDetail('spec9'),100)">
+          <div class="client-dot" style="background:var(--red);animation:pulse 1.5s infinite;"></div>
+          <span class="client-name">SPEC-9</span>
+          <span class="client-status-tag" style="background:rgba(255,68,85,0.1);color:var(--red);">⚠ Owes</span>
+        </div>
+        <div class="client-item" onclick="switchPage('clients',null);setTimeout(()=>openClientDetail('2020'),100)">
+          <div class="client-dot" style="background:var(--amber);"></div>
+          <span class="client-name">20/20 Optical</span>
+          <span class="client-status-tag" style="background:rgba(255,160,64,0.1);color:var(--amber);">Pipeline</span>
+        </div>
+        <div class="client-item" onclick="switchPage('clients',null);setTimeout(()=>openClientDetail('cfmhead'),100)">
+          <div class="client-dot" style="background:var(--amber);"></div>
+          <span class="client-name">Corp. Facility Mgmt</span>
+          <span class="client-status-tag" style="background:rgba(255,160,64,0.1);color:var(--amber);">Pipeline</span>
+        </div>
+        <div class="client-item" onclick="switchPage('clients',null);setTimeout(()=>openClientDetail('roofnation'),100)">
+          <div class="client-dot" style="background:var(--green);"></div>
+          <span class="client-name">ROOFNation Solutions</span>
+          <span class="client-status-tag" style="background:rgba(0,214,143,0.1);color:var(--green);">DBA</span>
+        </div>
+        <div class="client-item" onclick="switchPage('clients',null);setTimeout(()=>openClientDetail('growco'),100)">
+          <div class="client-dot" style="background:var(--amber);"></div>
+          <span class="client-name">Growco Landscaping</span>
+          <span class="client-status-tag" style="background:rgba(255,160,64,0.1);color:var(--amber);">Q2</span>
+        </div>
+        <div class="client-item" onclick="switchPage('clients',null);setTimeout(()=>openClientDetail('thermal'),100)">
+          <div class="client-dot" style="background:var(--amber);"></div>
+          <span class="client-name">Thermal Exchange</span>
+          <span class="client-status-tag" style="background:rgba(255,160,64,0.1);color:var(--amber);">Summer</span>
+        </div>
+        <div class="client-item" onclick="switchPage('clients',null);setTimeout(()=>openClientDetail('legacymortgage'),100)">
+          <div class="client-dot" style="background:var(--white3);"></div>
+          <span class="client-name">Legacy Mutual Mortgage</span>
+          <span class="client-status-tag" style="background:rgba(255,255,255,0.05);color:var(--white3);">Watch</span>
+        </div>
+      </div>
+      <div class="sb-section">
+        <div class="sb-title">Quick Links</div>
+        <a class="sb-item" href="https://geekthugga.github.io/mayo-infrastructure" target="_blank"><span class="sb-icon">🖥</span>MAYO App</a>
+        <a class="sb-item" href="https://n8n.srv803590.hstgr.cloud" target="_blank"><span class="sb-icon">⚡</span>n8n Dashboard</a>
+        <a class="sb-item" href="#" onclick="switchPage('lgl',null)"><span class="sb-icon">🔍</span>Lead Gen Luxe</a>
+      </div>
+    </aside>
+
+    <main class="content">
+
+      <!-- DASHBOARD -->
+      <div class="page active" id="page-dashboard">
+        <div class="stats-row">
+          <div class="stat b"><div class="stat-label">Active Clients</div><div class="stat-val b">4</div><div class="stat-sub">KW Legacy · A-One · CFM · ROOFNation</div></div>
+          <div class="stat a"><div class="stat-label">Pipeline</div><div class="stat-val a">5</div><div class="stat-sub">Growco · Thermal · 20/20 · Corp FM · Legacy Mortgage</div></div>
+          <div class="stat r"><div class="stat-label">Delinquent</div><div class="stat-val r">1</div><div class="stat-sub">SPEC-9 · Since 11/2025</div></div>
+          <div class="stat g"><div class="stat-label">Monthly MRR</div><div class="stat-val g">$11K</div><div class="stat-sub">4 active contracts</div></div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="sec-header"><div class="sec-title">⚡ <span>Recent Activity</span></div></div>
+        <div class="card" style="margin-bottom:24px;">
+          <div style="display:flex;flex-direction:column;gap:8px;" id="activityFeed"></div>
+        </div>
+
+        <!-- Quick Client Overview -->
+        <div class="sec-header">
+          <div class="sec-title">🏢 <span>Client Overview</span></div>
+          <button onclick="switchPage('clients',null)" style="font-size:11px;color:var(--blue2);background:none;border:none;cursor:pointer;font-family:var(--sans);">View All →</button>
+        </div>
+        <div class="clients-grid" id="dashClientGrid"></div>
+      </div>
+
+      <!-- CLIENTS -->
+      <div class="page" id="page-clients">
+        <div class="sec-header">
+          <div class="sec-title">🏢 <span>All Clients</span></div>
+          <button onclick="addClient()" style="padding:8px 16px;background:var(--blue);border:none;border-radius:8px;color:white;font-weight:700;font-size:12px;cursor:pointer;font-family:var(--sans);">+ Add Client</button>
+        </div>
+        <div class="clients-grid" id="allClientGrid"></div>
+      </div>
+
+      <!-- PIPELINE -->
+      <div class="page" id="page-pipeline">
+        <div class="sec-header"><div class="sec-title">💰 <span>Deal Pipeline</span></div></div>
+        <div class="card" style="margin-bottom:20px;">
+          <table class="pipeline-table" id="pipelineTable"></table>
+        </div>
+        <div class="sec-header"><div class="sec-title">⚠️ <span>Collections</span></div></div>
+        <div class="card" style="background:rgba(255,68,85,0.05);border-color:rgba(255,68,85,0.2);">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="font-size:15px;font-weight:800;color:var(--red);margin-bottom:4px;">SPEC-9 — Overdue Payment</div>
+              <div style="font-size:12px;color:var(--white3);">Outstanding since November 2025 · Follow up required immediately</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:22px;font-weight:900;color:var(--red);font-family:var(--mono);">⚠ OVERDUE</div>
+              <div style="font-size:10px;color:var(--white3);font-family:var(--mono);">Since 11/2025</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SERVICES -->
+      <div class="page" id="page-services">
+        <div class="sec-header"><div class="sec-title">📦 <span>Service Packages</span></div></div>
+        <div class="services-grid" style="margin-bottom:24px;" id="servicesGrid"></div>
+        <div class="sec-header"><div class="sec-title">➕ <span>Optional Add-Ons</span></div></div>
+        <div class="services-grid" id="addonsGrid"></div>
+      </div>
+
+      <!-- LEAD GEN LUXE -->
+      <div class="page" id="page-lgl">
+        <div style="margin-bottom:20px;">
+          <div style="font-size:22px;font-weight:900;margin-bottom:4px;">🔍 Lead Gen Luxe</div>
+          <div style="font-size:12px;color:var(--white3);font-family:var(--mono);">Search local businesses · Scrape contacts · Push to HGH CRM</div>
+        </div>
+        <div class="card" style="margin-bottom:20px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end;">
+            <div>
+              <div style="font-size:10px;color:var(--white3);font-family:var(--mono);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Business Type / Niche</div>
+              <input class="lgl-input" id="lgl_niche" placeholder="e.g. dental offices, restaurants, gyms...">
+            </div>
+            <div>
+              <div style="font-size:10px;color:var(--white3);font-family:var(--mono);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">City / Location</div>
+              <input class="lgl-input" id="lgl_city" placeholder="e.g. San Antonio TX">
+            </div>
+            <div>
+              <div style="font-size:10px;color:var(--white3);font-family:var(--mono);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Results Limit</div>
+              <select class="lgl-input" id="lgl_limit" style="cursor:pointer;">
+                <option value="10">10 results</option>
+                <option value="25">25 results</option>
+                <option value="50">50 results</option>
+              </select>
+            </div>
+            <button class="lgl-btn" onclick="runLGL()">🔍 Search</button>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <div class="sec-title" id="lglResultsTitle" style="font-size:13px;">Results will appear here</div>
+          <button onclick="pushAllToHGH()" id="pushAllBtn" style="display:none;padding:8px 16px;background:var(--blue);border:none;border-radius:8px;color:white;font-weight:700;font-size:12px;cursor:pointer;font-family:var(--sans);">Push All to HGH CRM →</button>
+        </div>
+        <div id="lglResults"></div>
+      </div>
+
+      <!-- TEAM TASKS -->
+      <div class="page" id="page-tasks">
+        <div class="sec-header">
+          <div class="sec-title">✅ <span>Team Tasks</span></div>
+          <button onclick="addTask()" style="padding:8px 16px;background:var(--blue);border:none;border-radius:8px;color:white;font-weight:700;font-size:12px;cursor:pointer;font-family:var(--sans);">+ Add Task</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--blue2);font-family:var(--mono);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+              <div style="width:24px;height:24px;border-radius:50%;background:rgba(26,143,255,0.2);display:flex;align-items:center;justify-content:center;font-size:10px;">TE</div> Tony Edwards
+            </div>
+            <div class="task-list" id="tonyTasks"></div>
+          </div>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--green);font-family:var(--mono);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+              <div style="width:24px;height:24px;border-radius:50%;background:rgba(0,214,143,0.2);display:flex;align-items:center;justify-content:center;font-size:10px;">BS</div> Bryant Spencer
+            </div>
+            <div class="task-list" id="bryantTasks"></div>
+          </div>
+        </div>
+        <div style="margin-top:24px;">
+          <div style="font-size:12px;font-weight:700;color:var(--white3);font-family:var(--mono);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">SDG Internal</div>
+          <div class="task-list" id="sdgTasks"></div>
+        </div>
+      </div>
+
+
+      <!-- KANBAN BOARD -->
+      <div class="page" id="page-kanban">
+        <div class="sec-header"><div class="sec-title">📋 <span>Task Board</span></div></div>
+        <div class="kanban-filters">
+          <button class="kf-btn active" onclick="filterKanban('all',this)">All</button>
+          <button class="kf-btn" onclick="filterKanban('TE',this)">Tony (TE)</button>
+          <button class="kf-btn" onclick="filterKanban('BS',this)">Bryant (BS)</button>
+          <button class="kf-btn" onclick="filterKanban('KW Legacy',this)">KW Legacy</button>
+          <button class="kf-btn" onclick="filterKanban('A-One',this)">A-One</button>
+          <button class="kf-btn" onclick="filterKanban('CFM',this)">CFM Security</button>
+          <button class="kf-btn" onclick="filterKanban('ROOFNation',this)">ROOFNation</button>
+          <button class="kf-btn" onclick="filterKanban('High',this)" style="border-color:rgba(255,68,85,0.3);color:var(--red);">🔴 High</button>
+        </div>
+        <div class="kanban-board" id="kanbanBoard"></div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Detail Panel -->
+<div class="detail-panel" id="detailPanel">
+  <button class="dp-close" onclick="closeDetail()">✕</button>
+  <div id="detailContent"></div>
+</div>
+
+<script>
+// DATA
+const CLIENTS={
+  kwlegacy:{
+    id:'kwlegacy',icon:'🏠',name:'KW Legacy',type:'Real Estate · Keller Williams',
+    status:'active',badge:'ACTIVE',badgeClass:'badge-active',
+    mrr:'$2,750',pct:55,color:'var(--green)',
+    tasks:[
+      {done:true,text:'Website created'},
+      {done:true,text:'HGH CRM setup'},
+      {done:false,active:true,text:'Legacy KW website updates'},
+      {done:false,text:'Email campaigns setup'},
+      {done:false,text:'Social media management'},
+      {done:false,text:'Meta social promos (geo targeted)'},
+      {done:false,text:'Google social promos (geo targeted)'},
+      {done:false,text:'Automated social media posts (IG/FB/LinkedIn)'},
+    ]
+  },
+  aone:{
+    id:'aone',icon:'🏢',name:'A-One Facility Services',type:'Commercial Facility Management',
+    status:'active',badge:'ACTIVE',badgeClass:'badge-active',
+    mrr:'$2,750',pct:40,color:'var(--green)',
+    tasks:[
+      {done:true,text:'Website created'},
+      {done:true,text:'Added CFM Security to services with link'},
+      {done:true,text:'Email addresses assigned'},
+      {done:false,active:true,text:'Calendar workflow — appointment notifications'},
+      {done:false,text:'Build social media page'},
+      {done:false,text:'Create email campaigns'},
+      {done:false,text:'Create campaign brief'},
+      {done:false,text:'Pull target client list (CFM Original Campaign List)'},
+      {done:false,text:'Create Ideal Customer Profile (ICP)'},
+      {done:false,text:'Setup Meta social promos (geo targeted)'},
+      {done:false,text:'Setup Google social promos (geo targeted)'},
+      {done:false,text:'Automated social media posts (IG/FB/LinkedIn)'},
+      {done:false,text:'Move domain to Cloudflare'},
+      {done:false,text:'Redirect old a-one site to new site (SEO)'},
+      {done:false,text:'A2P Setup'},
+    ]
+  },
+  cfm:{
+    id:'cfm',icon:'🔒',name:'CFM Security',type:'Security Services',
+    status:'active',badge:'ACTIVE',badgeClass:'badge-active',
+    mrr:'$2,750',pct:60,color:'var(--green)',
+    tasks:[
+      {done:true,text:'Create website'},
+      {done:true,text:'Build social media page (IG)'},
+      {done:true,text:'Create email campaigns'},
+      {done:true,text:'Create campaign brief'},
+      {done:true,text:'Pull target client list'},
+      {done:true,text:'Create Ideal Customer Profile (ICP)'},
+      {done:false,active:true,text:'FB Social Media Page'},
+      {done:false,active:true,text:'LinkedIn Social Media Page'},
+      {done:false,active:true,text:'Link social sites to website'},
+      {done:false,active:true,text:'Setup Meta social promos (geo targeted)'},
+      {done:false,active:true,text:'Setup Google social promos (geo targeted)'},
+      {done:false,active:true,text:'CFM Security A2P'},
+      {done:false,active:true,text:'SpeakAPI → GHL Voice AI transition'},
+      {done:false,text:'Automated social media posts (IG/FB/LinkedIn)'},
+    ]
+  },
+  spec9:{
+    id:'spec9',icon:'⚠️',name:'SPEC-9',type:'Client — Payment Overdue',
+    status:'delinquent',badge:'⚠ DELINQUENT',badgeClass:'badge-delinquent',
+    mrr:'$0',pct:100,color:'var(--red)',
+    alert:'Outstanding payment since November 2025. Follow up required.',
+    tasks:[
+      {done:true,text:'Services delivered'},
+      {done:false,active:true,text:'Chase payment — overdue since 11/2025'},
+      {done:false,text:'Send formal invoice reminder'},
+      {done:false,text:'Escalate if no response by 30 days'},
+    ]
+  },
+  '2020':{
+    id:'2020',icon:'👁',name:'20/20 Optical',type:'Optical Services · Re-engagement',
+    status:'pipeline',badge:'PIPELINE',badgeClass:'badge-pipeline',
+    mrr:'TBD',pct:30,color:'var(--amber)',
+    tasks:[
+      {done:true,text:'Website build completed'},
+      {done:true,text:'Email warmup done'},
+      {done:false,active:true,text:'Close same contract as A-One + CFM'},
+      {done:false,text:'HGH CRM onboarding'},
+      {done:false,text:'Lead generation system setup'},
+      {done:false,text:'Social media management'},
+      {done:false,text:'Campaign launch'},
+    ]
+  },
+  roofnation:{
+    id:'roofnation',icon:'🏠',name:'ROOFNation Solutions',type:'DBA under Spenward · Roofing',
+    status:'active',badge:'ACTIVE · DBA',badgeClass:'badge-active',
+    mrr:'$2,750',pct:45,color:'var(--green)',
+    tasks:[
+      {done:true,text:'DBA established under Spenward'},
+      {done:true,text:'HGH account setup'},
+      {done:true,text:'Cold email marketing launched'},
+      {done:true,text:'n8n workflow — Gemini images + GPT-4 captions'},
+      {done:true,text:'Telegram bot — production live'},
+      {done:false,active:true,text:'MAYO app webhook integration'},
+      {done:false,text:'Meta + Google ad campaigns'},
+      {done:false,text:'Full social media management'},
+      {done:false,text:'Lead generation system'},
+    ]
+  },
+  growco:{
+    id:'growco',icon:'🌿',name:'Growco Landscaping',type:'DBA under Spenward · Landscaping · Q2 2026',
+    status:'pipeline',badge:'ACTIVATING Q2',badgeClass:'badge-pipeline',
+    mrr:'TBD',pct:10,color:'var(--amber)',
+    tasks:[
+      {done:true,text:'DBA in progress under Spenward'},
+      {done:false,active:true,text:'HGH account setup'},
+      {done:false,text:'Website build'},
+      {done:false,text:'Social media pages (IG/FB)'},
+      {done:false,text:'Lead generation system'},
+      {done:false,text:'n8n MAYO workflow setup'},
+      {done:false,text:'Campaign launch — Q2 2026'},
+    ]
+  },
+  thermal:{
+    id:'thermal',icon:'❄️',name:'Thermal Exchange',type:'DBA under Spenward · HVAC · Summer 2026',
+    status:'pipeline',badge:'ACTIVATING SUMMER',badgeClass:'badge-pipeline',
+    mrr:'TBD',pct:5,color:'var(--amber)',
+    tasks:[
+      {done:true,text:'DBA planned under Spenward'},
+      {done:false,active:true,text:'DBA establishment'},
+      {done:false,text:'HGH account setup'},
+      {done:false,text:'Website build'},
+      {done:false,text:'Social media pages'},
+      {done:false,text:'Lead generation system'},
+      {done:false,text:'Summer 2026 campaign launch'},
+    ]
+  },
+  legacymortgage:{
+    id:'legacymortgage',icon:'🏦',name:'Legacy Mutual Mortgage',type:'Mortgage Services · Inactive — Watch',
+    status:'inactive',badge:'INACTIVE',badgeClass:'badge-prev',
+    mrr:'$0',pct:30,color:'var(--white3)',
+    alert:'Inactive client — reactivation talks in progress. Monitor closely.',
+    tasks:[
+      {done:true,text:'Previous work completed'},
+      {done:true,text:'Relationship maintained'},
+      {done:false,active:true,text:'Reactivation talks — follow up'},
+      {done:false,text:'Proposal for new contract'},
+      {done:false,text:'HGH onboarding refresh'},
+      {done:false,text:'Campaign relaunch'},
+    ]
+  },
+  cfmhead:{
+    id:'cfmhead',icon:'🏗',name:'Corporate Facility Management',type:'Head Company · CFM Group',
+    status:'pipeline',badge:'PIPELINE',badgeClass:'badge-pipeline',
+    mrr:'TBD',pct:20,color:'var(--amber)',
+    tasks:[
+      {done:true,text:'Website built'},
+      {done:true,text:'Cold email marketing campaign done'},
+      {done:false,active:true,text:'Re-engage for full service contract'},
+      {done:false,text:'HGH CRM onboarding'},
+      {done:false,text:'Lead generation system'},
+      {done:false,text:'Social media management launch'},
+    ]
+  }
+};
+
+const PIPELINE_DATA=[
+  {client:'ROOFNation Solutions',service:'DBA · Social Media + n8n',mrr:'$2,750/mo',status:'Active',since:'Q1 2025',color:'var(--green)'},
+  {client:'KW Legacy',service:'Full Service Package',mrr:'$2,750/mo',status:'Active',since:'Q1 2025',color:'var(--green)'},
+  {client:'A-One Facility Services',service:'Full Service Package',mrr:'$2,750/mo',status:'Active',since:'Q2 2025',color:'var(--green)'},
+  {client:'CFM Security',service:'Full Service Package',mrr:'$2,750/mo',status:'Active',since:'Q3 2025',color:'var(--green)'},
+  {client:'SPEC-9',service:'Services Rendered',mrr:'OVERDUE',status:'⚠ Delinquent',since:'11/2025',color:'var(--red)'},
+  {client:'20/20 Optical',service:'Full Service Contract (Pending)',mrr:'$2,750/mo',status:'Closing',since:'Pipeline',color:'var(--amber)'},
+  {client:'Corp. Facility Mgmt',service:'Full Service Contract (Pending)',mrr:'$2,750/mo',status:'Re-engage',since:'Pipeline',color:'var(--amber)'},
+];
+
+const SERVICES=[
+  {name:'Website & Funnel Development',price:'$4,500',period:'one-time',desc:'Custom landing pages, lead capture forms, and conversion-optimized design'},
+  {name:'Lead Generation System',price:'$2,000 setup + $1,500',period:'/month',desc:'Multi-channel advertising management, creative production, and campaign optimization'},
+  {name:'Hyper Growth Hub CRM',price:'$500',period:'/month',desc:'Complete CRM platform with automation, reporting, and unlimited users'},
+  {name:'Social Media Management',price:'$1,000',period:'/month',desc:'Content creation, community management, and social advertising'},
+  {name:'Hosting & Reporting',price:'$250',period:'/month',desc:'Secure hosting infrastructure and comprehensive analytics dashboards'},
+];
+
+const ADDONS=[
+  {name:'Reputation Management',price:'$500',period:'/month',desc:'Proactive review generation, response management, and online reputation monitoring'},
+  {name:'SEO Optimization',price:'$750',period:'/month',desc:'Technical SEO improvements, content optimization, local search dominance, and ongoing keyword strategy'},
+  {name:'Photography & Videography',price:'$1,200',period:'one-time',desc:'Professional photo and video shoots featuring your team, facilities, and services in action'},
+  {name:'Advanced AI Chatbot',price:'$250',period:'/month',desc:'Sophisticated conversational AI that qualifies leads, answers questions, and schedules appointments 24/7'},
+];
+
+const TEAM_TASKS={
+  tony:[
+    {done:true,text:'Build MAYO Infrastructure App',owner:'TE'},
+    {done:true,text:'ROOFNation n8n workflow — production live',owner:'TE'},
+    {done:false,active:true,text:'Shot Doctor workflow — end-to-end test',owner:'TE'},
+    {done:false,active:true,text:'SDG Command Center build',owner:'TE'},
+    {done:false,text:'Spenward A2P setup',owner:'TE'},
+    {done:false,text:'Spenward email campaigns',owner:'TE'},
+    {done:false,text:'Invoice updates — gross revenue with discounts',owner:'TE'},
+    {done:false,text:'Spenward Cloud Storage setup',owner:'TE'},
+    {done:false,text:'Use the tools to sell the tools',owner:'TE'},
+    {done:false,text:'Lead Gen Luxe — n8n workflow build',owner:'TE'},
+  ],
+  bryant:[
+    {done:true,text:'Investment into HGH + SIMG — SDG formed',owner:'BS'},
+    {done:false,active:true,text:'A-One Facility — calendar workflow approval',owner:'BS'},
+    {done:false,active:true,text:'CFM Security — FB + LinkedIn pages',owner:'BS'},
+    {done:false,text:'SPEC-9 — follow up on overdue payment',owner:'BS'},
+    {done:false,text:'20/20 Optical — close full service contract',owner:'BS'},
+    {done:false,text:'Corp. Facility Mgmt — re-engagement outreach',owner:'BS'},
+    {done:false,text:'Review Meta + Google ad campaigns (ROOFNation)',owner:'BS'},
+  ],
+  sdg:[
+    {done:false,active:true,text:'Meta & Google Ad Campaigns — ROOFNation'},
+    {done:false,active:true,text:'Email campaigns — ROOFNation'},
+    {done:false,active:true,text:'Spenward Cloud Storage'},
+    {done:false,text:'Spenward email campaigns'},
+    {done:false,text:'Use the tools to sell the tools — outreach strategy'},
+    {done:false,text:'GHL Voice AI — replace SpeakAPI for CFM'},
+    {done:false,text:'Lead Gen Luxe — launch for client prospecting'},
+  ]
+};
+
+const ACTIVITY=[
+  {icon:'🌿',text:'Growco Landscaping — DBA activation planned for Q2 2026',time:'Q2 2026',color:'rgba(255,160,64,0.1)'},
+  {icon:'❄️',text:'Thermal Exchange — HVAC DBA activation planned for Summer 2026',time:'Summer 2026',color:'rgba(255,160,64,0.1)'},
+  {icon:'🏦',text:'Legacy Mutual Mortgage — reactivation talks in progress',time:'Watch',color:'rgba(255,255,255,0.05)'},
+  {icon:'🏠',text:'ROOFNation Solutions — n8n production live, MAYO webhook next',time:'Active',color:'rgba(0,214,143,0.1)'},
+  {icon:'🔒',text:'CFM Security — IG social media page approved',time:'Today',color:'rgba(26,143,255,0.15)'},
+  {icon:'🏢',text:'A-One Facility — website + email addresses live',time:'This week',color:'rgba(0,214,143,0.1)'},
+  {icon:'⚠️',text:'SPEC-9 — payment overdue since November 2025',time:'11/2025',color:'rgba(255,68,85,0.1)'},
+  {icon:'🏠',text:'KW Legacy — website updates in progress',time:'Ongoing',color:'rgba(26,143,255,0.1)'},
+  {icon:'👁',text:'20/20 Optical — email warmup complete, contract closing',time:'Pipeline',color:'rgba(255,160,64,0.1)'},
+  {icon:'🏗',text:'Corp. Facility Mgmt — website + cold email done, re-engaging',time:'Pipeline',color:'rgba(255,160,64,0.1)'},
+];
+
+// RENDER FUNCTIONS
+function renderClientCard(c, onclick){
+  const tasks=c.tasks.slice(0,4).map(t=>`
+    <div class="task-row">
+      <span class="task-icon" style="color:${t.done?'var(--green)':t.active?'var(--blue2)':'var(--white3)'}">${t.done?'✓':t.active?'▶':'◯'}</span>
+      <span style="font-size:11px;color:${t.done?'var(--white3)':t.active?'var(--white)':'var(--white3)'}">${t.text}</span>
+    </div>
+  `).join('');
+  const done=c.tasks.filter(t=>t.done).length;
+  return `
+    <div class="client-card ${c.status==='delinquent'?'delinquent':''}" onclick="openClientDetail('${c.id}')">
+      ${c.status==='delinquent'?'<div style="position:absolute;top:0;left:0;right:0;height:2px;background:var(--red);"></div>':''}
+      <div class="cc-header">
+        <span class="cc-icon">${c.icon}</span>
+        <span class="cc-badge ${c.badgeClass}">${c.badge}</span>
+      </div>
+      <div class="cc-name">${c.name}</div>
+      <div class="cc-type">${c.type}</div>
+      ${c.alert?`<div style="font-size:11px;color:var(--red);background:rgba(255,68,85,0.08);border-radius:6px;padding:6px 10px;margin-bottom:10px;">${c.alert}</div>`:''}
+      <div class="prog-row"><span>Progress</span><span style="color:${c.color};font-weight:700;">${done}/${c.tasks.length}</span></div>
+      <div class="prog-bar"><div class="prog-fill" style="width:${Math.round(done/c.tasks.length*100)}%;background:${c.color};"></div></div>
+      <div class="task-preview">${tasks}</div>
+      ${c.tasks.length>4?`<div style="font-size:10px;color:var(--white3);margin-top:6px;font-family:var(--mono);">+${c.tasks.length-4} more → click to expand</div>`:''}
+    </div>
+  `;
+}
+
+function renderDashboard(){
+  // Activity feed
+  const feed=document.getElementById('activityFeed');
+  ACTIVITY.forEach(a=>{
+    feed.innerHTML+=`
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:${a.color};">
+        <span style="font-size:16px;">${a.icon}</span>
+        <span style="font-size:12px;flex:1;">${a.text}</span>
+        <span style="font-size:10px;color:var(--white3);font-family:var(--mono);">${a.time}</span>
+      </div>
+    `;
+  });
+  // Client grid (first 4)
+  const grid=document.getElementById('dashClientGrid');
+  ['kwlegacy','aone','cfm','spec9'].forEach(id=>{
+    grid.innerHTML+=renderClientCard(CLIENTS[id]);
+  });
+}
+
+function renderAllClients(){
+  const grid=document.getElementById('allClientGrid');
+  if(grid.innerHTML) return;
+  Object.values(CLIENTS).forEach(c=>{
+    grid.innerHTML+=renderClientCard(c);
+  });
+}
+
+function renderPipeline(){
+  const table=document.getElementById('pipelineTable');
+  if(table.innerHTML) return;
+  table.innerHTML=`<tr><th>Client</th><th>Service</th><th>MRR</th><th>Status</th><th>Since</th></tr>`;
+  PIPELINE_DATA.forEach(r=>{
+    table.innerHTML+=`
+      <tr>
+        <td style="font-weight:700;">${r.client}</td>
+        <td style="color:var(--white2);">${r.service}</td>
+        <td style="font-family:var(--mono);font-weight:700;color:${r.color};">${r.mrr}</td>
+        <td><span style="font-size:10px;padding:3px 8px;border-radius:6px;background:${r.color}22;color:${r.color};font-family:var(--mono);font-weight:700;">${r.status}</span></td>
+        <td style="color:var(--white3);font-family:var(--mono);font-size:11px;">${r.since}</td>
+      </tr>
+    `;
+  });
+}
+
+function renderServices(){
+  const grid=document.getElementById('servicesGrid');
+  const addons=document.getElementById('addonsGrid');
+  if(grid.innerHTML) return;
+  SERVICES.forEach(s=>{
+    grid.innerHTML+=`
+      <div class="service-card">
+        <div class="svc-name">${s.name}</div>
+        <div class="svc-price">${s.price}<span style="font-size:11px;color:var(--white3);">${s.period}</span></div>
+        <div class="svc-desc">${s.desc}</div>
+      </div>
+    `;
+  });
+  ADDONS.forEach(s=>{
+    addons.innerHTML+=`
+      <div class="service-card">
+        <div class="svc-name">${s.name}</div>
+        <div class="svc-price">${s.price}<span style="font-size:11px;color:var(--white3);">${s.period}</span></div>
+        <div class="svc-desc">${s.desc}</div>
+      </div>
+    `;
+  });
+}
+
+function renderTasks(){
+  const tony=document.getElementById('tonyTasks');
+  const bryant=document.getElementById('bryantTasks');
+  const sdg=document.getElementById('sdgTasks');
+  if(tony.innerHTML) return;
+
+  TEAM_TASKS.tony.forEach(t=>{
+    tony.innerHTML+=`
+      <div class="task-item">
+        <div class="task-check ${t.done?'done':t.active?'active':''}">${t.done?'✓':t.active?'▶':''}</div>
+        <span class="task-text" style="color:${t.done?'var(--white3)':'var(--white)'};text-decoration:${t.done?'line-through':''}">${t.text}</span>
+        <span class="task-owner">TE</span>
+      </div>
+    `;
+  });
+  TEAM_TASKS.bryant.forEach(t=>{
+    bryant.innerHTML+=`
+      <div class="task-item">
+        <div class="task-check ${t.done?'done':t.active?'active':''}" style="${t.active?'background:var(--green);border-color:var(--green);':''}">${t.done?'✓':t.active?'▶':''}</div>
+        <span class="task-text" style="color:${t.done?'var(--white3)':'var(--white)'}">${t.text}</span>
+        <span class="task-owner" style="background:rgba(0,214,143,0.1);color:var(--green);">BS</span>
+      </div>
+    `;
+  });
+  TEAM_TASKS.sdg.forEach(t=>{
+    sdg.innerHTML+=`
+      <div class="task-item">
+        <div class="task-check ${t.done?'done':t.active?'active':''}">${t.done?'✓':t.active?'▶':''}</div>
+        <span class="task-text" style="color:${t.done?'var(--white3)':'var(--white)'}">${t.text}</span>
+        <span class="task-owner" style="background:rgba(255,255,255,0.06);color:var(--white2);">SDG</span>
+      </div>
+    `;
+  });
+}
+
+// LGL
+const DEMO_RESULTS=[
+  {name:'Elite Dental Group',address:'1234 Main St, San Antonio TX','phone':'(210) 555-0142',website:'elitedental.com',pushed:false},
+  {name:'Sunshine Family Dentistry',address:'567 Oak Ave, San Antonio TX',phone:'(210) 555-0287',website:'sunshinedental.com',pushed:false},
+  {name:'Downtown Dental Associates',address:'890 Commerce St, San Antonio TX',phone:'(210) 555-0391',website:'downtowndental.com',pushed:false},
+  {name:'Alamo Heights Dental',address:'321 Broadway, San Antonio TX',phone:'(210) 555-0445',website:'alamodental.com',pushed:false},
+  {name:'Pearl District Smiles',address:'654 Pearl Pkwy, San Antonio TX',phone:'(210) 555-0523',website:'pearlsmiles.com',pushed:false},
+];
+
+let lglResults=[];
+
+function runLGL(){
+  const niche=document.getElementById('lgl_niche').value||'businesses';
+  const city=document.getElementById('lgl_city').value||'San Antonio TX';
+  const container=document.getElementById('lglResults');
+  const title=document.getElementById('lglResultsTitle');
+  const pushBtn=document.getElementById('pushAllBtn');
+
+  container.innerHTML=`<div style="text-align:center;padding:40px;color:var(--white3);font-family:var(--mono);font-size:12px;">🔍 Searching for ${niche} in ${city}...</div>`;
+
+  setTimeout(()=>{
+    lglResults=DEMO_RESULTS.map(r=>({...r,pushed:false}));
+    title.textContent=`Found ${lglResults.length} results for "${niche}" in ${city}`;
+    pushBtn.style.display='block';
+    renderLGLResults();
+  },1500);
+}
+
+function renderLGLResults(){
+  const container=document.getElementById('lglResults');
+  container.innerHTML='';
+  lglResults.forEach((r,i)=>{
+    container.innerHTML+=`
+      <div class="lgl-result" id="lgl_result_${i}">
+        <div class="lgl-biz">
+          <div class="lgl-biz-name">${r.name}</div>
+          <div class="lgl-biz-info">${r.address} · ${r.phone} · ${r.website}</div>
+        </div>
+        ${r.pushed
+          ?'<span class="lgl-status" style="background:rgba(0,214,143,0.1);color:var(--green);">✓ In HGH</span>'
+          :`<button class="lgl-push" onclick="pushOne(${i})">Push to HGH →</button>`
+        }
+      </div>
+    `;
+  });
+}
+
+function pushOne(i){
+  lglResults[i].pushed=true;
+  renderLGLResults();
+  showToast(`${lglResults[i].name} pushed to HGH CRM`);
+}
+
+function pushAllToHGH(){
+  lglResults.forEach(r=>r.pushed=true);
+  renderLGLResults();
+  showToast(`All ${lglResults.length} leads pushed to HGH CRM!`);
+}
+
+function showToast(msg){
+  const t=document.createElement('div');
+  t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--blue);color:white;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:999;animation:slide-in 0.3s ease;';
+  t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),3000);
+}
+
+// Detail panel
+function openClientDetail(id){
+  const c=CLIENTS[id];
+  if(!c) return;
+  const panel=document.getElementById('detailPanel');
+  const content=document.getElementById('detailContent');
+  const done=c.tasks.filter(t=>t.done).length;
+
+  const tasks=c.tasks.map(t=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--border);">
+      <span style="color:${t.done?'var(--green)':t.active?'var(--blue2)':'var(--white3)'};width:14px;font-size:12px;">${t.done?'✓':t.active?'▶':'◯'}</span>
+      <span style="font-size:12px;color:${t.done?'var(--white3)':t.active?'var(--white)':'var(--white3)'};">${t.text}</span>
+    </div>
+  `).join('');
+
+  content.innerHTML=`
+    <div style="margin-bottom:20px;">
+      <div style="font-size:30px;margin-bottom:8px;">${c.icon}</div>
+      <div style="font-size:20px;font-weight:900;margin-bottom:4px;">${c.name}</div>
+      <div style="font-size:12px;color:var(--white3);margin-bottom:4px;">${c.type}</div>
+      <div style="font-size:13px;font-weight:700;color:${c.color};">MRR: ${c.mrr}</div>
+    </div>
+    ${c.alert?`<div style="background:rgba(255,68,85,0.1);border:1px solid rgba(255,68,85,0.2);border-radius:8px;padding:12px;margin-bottom:16px;font-size:12px;color:var(--red);">⚠️ ${c.alert}</div>`:''}
+    <div style="background:var(--card);border-radius:10px;padding:14px;margin-bottom:20px;">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+        <span style="font-size:11px;color:var(--white3);font-family:var(--mono);">Project Progress</span>
+        <span style="font-size:13px;font-weight:700;font-family:var(--mono);color:${c.color};">${done}/${c.tasks.length} tasks</span>
+      </div>
+      <div class="prog-bar" style="margin-bottom:0;"><div class="prog-fill" style="width:${Math.round(done/c.tasks.length*100)}%;background:${c.color};"></div></div>
+    </div>
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--white3);font-family:var(--mono);margin-bottom:10px;">All Tasks</div>
+    ${tasks}
+  `;
+  panel.classList.add('open');
+}
+
+function closeDetail(){document.getElementById('detailPanel').classList.remove('open');}
+
+// Page switching
+const pages=['dashboard','clients','pipeline','services','lgl','tasks','kanban'];
+function switchPage(page, btn){
+  pages.forEach(p=>{
+    const el=document.getElementById('page-'+p);
+    if(el) el.classList.toggle('active', p===page);
+  });
+  document.querySelectorAll('.nav-btn,.sb-item').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  if(page==='clients') renderAllClients();
+  if(page==='pipeline') renderPipeline();
+  if(page==='services') renderServices();
+  if(page==='tasks') renderTasks();
+  if(page==='kanban') renderKanban();
+}
+
+function addClient(){alert('Add Client — coming soon! Will generate full onboarding checklist automatically.');}
+function addTask(){alert('Add Task — coming soon!');}
+
+
+// KANBAN DATA
+let kanbanTasks = [
+  // KW Legacy
+  {id:'k1',client:'KW Legacy',task:'Legacy KW website updates',assignee:'TE',priority:'High',col:'progress'},
+  {id:'k2',client:'KW Legacy',task:'Setup email campaigns',assignee:'BS',priority:'High',col:'backlog'},
+  {id:'k3',client:'KW Legacy',task:'Meta social promos (geo targeted)',assignee:'TE',priority:'Med',col:'backlog'},
+  {id:'k4',client:'KW Legacy',task:'Google social promos (geo targeted)',assignee:'TE',priority:'Med',col:'backlog'},
+  {id:'k5',client:'KW Legacy',task:'Automated social media posts IG/FB/LinkedIn',assignee:'BS',priority:'Low',col:'backlog'},
+  // A-One
+  {id:'k6',client:'A-One',task:'Calendar workflow — appointment notifications',assignee:'BS',priority:'High',col:'progress'},
+  {id:'k7',client:'A-One',task:'Build social media pages',assignee:'TE',priority:'Med',col:'backlog'},
+  {id:'k8',client:'A-One',task:'Move domain to Cloudflare',assignee:'TE',priority:'Med',col:'backlog'},
+  {id:'k9',client:'A-One',task:'A2P Setup',assignee:'BS',priority:'High',col:'backlog'},
+  {id:'k10',client:'A-One',task:'Create email campaigns',assignee:'BS',priority:'Med',col:'backlog'},
+  // CFM
+  {id:'k11',client:'CFM Security',task:'FB + LinkedIn social media pages',assignee:'BS',priority:'High',col:'progress'},
+  {id:'k12',client:'CFM Security',task:'Link social sites to website',assignee:'TE',priority:'High',col:'progress'},
+  {id:'k13',client:'CFM Security',task:'Meta + Google promos (geo targeted)',assignee:'BS',priority:'High',col:'progress'},
+  {id:'k14',client:'CFM Security',task:'CFM A2P setup',assignee:'TE',priority:'High',col:'backlog'},
+  {id:'k15',client:'CFM Security',task:'GHL Voice AI (replace SpeakAPI)',assignee:'TE',priority:'Med',col:'backlog'},
+  // ROOFNation
+  {id:'k16',client:'ROOFNation',task:'MAYO app webhook integration',assignee:'TE',priority:'High',col:'progress'},
+  {id:'k17',client:'ROOFNation',task:'Meta + Google ad campaigns',assignee:'BS',priority:'Med',col:'backlog'},
+  // Pipeline
+  {id:'k18',client:'20/20 Optical',task:'Close full service contract',assignee:'BS',priority:'High',col:'backlog'},
+  {id:'k19',client:'Corp FM',task:'Re-engagement outreach',assignee:'BS',priority:'Med',col:'backlog'},
+  {id:'k20',client:'Legacy Mortgage',task:'Reactivation follow-up call',assignee:'BS',priority:'Med',col:'backlog'},
+  // SDG Internal
+  {id:'k21',client:'SDG Internal',task:'Spenward A2P setup',assignee:'TE',priority:'High',col:'backlog'},
+  {id:'k22',client:'SDG Internal',task:'Invoice updates — gross revenue',assignee:'TE',priority:'Med',col:'progress'},
+  {id:'k23',client:'SDG Internal',task:'Spenward email campaigns',assignee:'BS',priority:'Med',col:'backlog'},
+  {id:'k24',client:'SDG Internal',task:'SPEC-9 — chase overdue payment',assignee:'BS',priority:'High',col:'progress'},
+  // Done examples
+  {id:'k25',client:'CFM Security',task:'Create website',assignee:'TE',priority:'High',col:'done'},
+  {id:'k26',client:'A-One',task:'Create website',assignee:'TE',priority:'High',col:'done'},
+  {id:'k27',client:'ROOFNation',task:'n8n workflow — production live',assignee:'TE',priority:'High',col:'done'},
+];
+
+const COLS=[
+  {id:'backlog',label:'Backlog',color:'var(--white3)'},
+  {id:'progress',label:'In Progress',color:'var(--blue2)'},
+  {id:'review',label:'Review',color:'var(--amber)'},
+  {id:'done',label:'Done',color:'var(--green)'},
+];
+
+let kanbanFilter='all';
+let dragCard=null;
+
+function renderKanban(){
+  const board=document.getElementById('kanbanBoard');
+  board.innerHTML='';
+
+  COLS.forEach(col=>{
+    const tasks=kanbanTasks.filter(t=>{
+      if(t.col!==col.id) return false;
+      if(kanbanFilter==='all') return true;
+      if(kanbanFilter==='TE'||kanbanFilter==='BS') return t.assignee===kanbanFilter;
+      if(kanbanFilter==='High') return t.priority==='High';
+      return t.client.includes(kanbanFilter);
+    });
+
+    const colEl=document.createElement('div');
+    colEl.className='kanban-col';
+    colEl.dataset.col=col.id;
+
+    colEl.addEventListener('dragover',(e)=>{
+      e.preventDefault();
+      colEl.classList.add('drag-over');
+    });
+    colEl.addEventListener('dragleave',()=>colEl.classList.remove('drag-over'));
+    colEl.addEventListener('drop',(e)=>{
+      e.preventDefault();
+      colEl.classList.remove('drag-over');
+      if(dragCard){
+        const task=kanbanTasks.find(t=>t.id===dragCard);
+        if(task) task.col=col.id;
+        renderKanban();
+      }
+    });
+
+    colEl.innerHTML=`
+      <div class="kanban-col-header">
+        <span class="kanban-col-title" style="color:${col.color};">${col.label}</span>
+        <span class="kanban-count">${tasks.length}</span>
+      </div>
+    `;
+
+    tasks.forEach(task=>{
+      const card=document.createElement('div');
+      card.className='kanban-card';
+      card.draggable=true;
+      card.dataset.id=task.id;
+
+      card.addEventListener('dragstart',()=>{
+        dragCard=task.id;
+        setTimeout(()=>card.classList.add('dragging'),0);
+      });
+      card.addEventListener('dragend',()=>{
+        dragCard=null;
+        card.classList.remove('dragging');
+      });
+
+      const assigneeColor=task.assignee==='TE'?'rgba(26,143,255,0.2)':'rgba(0,214,143,0.2)';
+      const assigneeText=task.assignee==='TE'?'var(--blue2)':'var(--green)';
+      const prioClass=task.priority==='High'?'priority-high':task.priority==='Med'?'priority-med':'priority-low';
+
+      card.innerHTML=`
+        <div class="kc-client">${task.client}</div>
+        <div class="kc-task">${task.task}</div>
+        <div class="kc-footer">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <div class="kc-assignee" style="background:${assigneeColor};color:${assigneeText};">${task.assignee}</div>
+            <span class="kc-priority ${prioClass}">${task.priority}</span>
+          </div>
+          <div style="display:flex;gap:4px;">
+            <button onclick="moveCard('${task.id}',-1)" style="background:none;border:none;color:var(--white3);cursor:pointer;font-size:12px;padding:2px 4px;">←</button>
+            <button onclick="moveCard('${task.id}',1)" style="background:none;border:none;color:var(--white3);cursor:pointer;font-size:12px;padding:2px 4px;">→</button>
+          </div>
+        </div>
+      `;
+      colEl.appendChild(card);
+    });
+
+    // Add task button
+    const addBtn=document.createElement('button');
+    addBtn.className='add-task-btn';
+    addBtn.textContent='+ Add Task';
+    addBtn.onclick=()=>addKanbanTask(col.id);
+    colEl.appendChild(addBtn);
+
+    board.appendChild(colEl);
+  });
+}
+
+function moveCard(id, dir){
+  const task=kanbanTasks.find(t=>t.id===id);
+  if(!task) return;
+  const colIndex=COLS.findIndex(c=>c.id===task.col);
+  const newIndex=Math.max(0,Math.min(COLS.length-1,colIndex+dir));
+  task.col=COLS[newIndex].id;
+  renderKanban();
+}
+
+function filterKanban(filter, btn){
+  kanbanFilter=filter;
+  document.querySelectorAll('.kf-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderKanban();
+}
+
+function addKanbanTask(col){
+  const task=prompt('Task description:');
+  if(!task) return;
+  const client=prompt('Client name:');
+  if(!client) return;
+  const assignee=prompt('Assign to (TE or BS):');
+  const priority=prompt('Priority (High/Med/Low):') || 'Med';
+  kanbanTasks.push({
+    id:'k'+Date.now(),
+    client:client,
+    task:task,
+    assignee:assignee==='BS'?'BS':'TE',
+    priority:priority,
+    col:col
+  });
+  renderKanban();
+}
+
+// Init
+renderDashboard();
+</script>
+</body>
+</html>

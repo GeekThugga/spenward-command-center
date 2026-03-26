@@ -344,31 +344,50 @@ header{
           <span class="client-name">Corp. Facility Mgmt</span>
           <span class="client-status-tag" style="background:rgba(255,160,64,0.1);color:var(--amber);">Pipeline</span>
         </div>
-        <div class="client-item" onclick="switchPage('clients',null);setTimeout(()=>openClientDetail('roofnation'),100)">
-          <div class="client-dot" style="background:var(--green);"></div>
-          <span class="client-name">ROOFNation Solutions</span>
-          <span class="client-status-tag" style="background:rgba(0,214,143,0.1);color:var(--green);">DBA</span>
-        </div>
-        <div class="client-item" onclick="switchPage('clients',null);setTimeout(()=>openClientDetail('growco'),100)">
-          <div class="client-dot" style="background:var(--amber);"></div>
-          <span class="client-name">Growco Landscaping</span>
-          <span class="client-status-tag" style="background:rgba(255,160,64,0.1);color:var(--amber);">Q2</span>
-        </div>
-        <div class="client-item" onclick="switchPage('clients',null);setTimeout(()=>openClientDetail('thermal'),100)">
-          <div class="client-dot" style="background:var(--amber);"></div>
-          <span class="client-name">Thermal Exchange</span>
-          <span class="client-status-tag" style="background:rgba(255,160,64,0.1);color:var(--amber);">Summer</span>
-        </div>
+        
+        
+        
         <div class="client-item" onclick="switchPage('clients',null);setTimeout(()=>openClientDetail('legacymortgage'),100)">
           <div class="client-dot" style="background:var(--white3);"></div>
           <span class="client-name">Legacy Mutual Mortgage</span>
           <span class="client-status-tag" style="background:rgba(255,255,255,0.05);color:var(--white3);">Watch</span>
         </div>
       </div>
+            <div class="sb-section">
+        <div class="sb-title">SDG Companies</div>
+        <div class="client-item" onclick="switchPage('clients',null);setTimeout(()=>openClientDetail('roofnation'),100)">
+          <div class="client-dot" style="background:var(--green);"></div>
+          <span class="client-name">ROOFNation Solutions</span>
+          <span class="client-status-tag" style="background:rgba(0,214,143,0.1);color:var(--green);">DBA · Live</span>
+        </div>
+        <div class="client-item" onclick="switchPage('clients',null);setTimeout(()=>openClientDetail('growco'),100)">
+          <div class="client-dot" style="background:var(--amber);"></div>
+          <span class="client-name">Growco Landscaping</span>
+          <span class="client-status-tag" style="background:rgba(255,160,64,0.1);color:var(--amber);">DBA · Q2</span>
+        </div>
+        <div class="client-item" onclick="switchPage('clients',null);setTimeout(()=>openClientDetail('thermal'),100)">
+          <div class="client-dot" style="background:var(--amber);"></div>
+          <span class="client-name">Thermal Exchange</span>
+          <span class="client-status-tag" style="background:rgba(255,160,64,0.1);color:var(--amber);">DBA · Summer</span>
+        </div>
+      </div>
       <div class="sb-section">
+        <div class="sb-title">SDG Tech Stack</div>
+        <div class="sb-item" onclick="switchPage('lgl',null)" style="cursor:pointer;">
+          <span class="sb-icon">🔍</span>
+          <span>Lead Gen Luxe</span>
+          <span style="margin-left:auto;font-size:9px;font-weight:700;padding:2px 7px;border-radius:6px;background:rgba(0,214,143,0.1);color:var(--green);font-family:var(--mono);">LIVE</span>
+        </div>
+        <div class="sb-item" style="cursor:pointer;opacity:0.8;">
+          <span class="sb-icon">🎙</span>
+          <span>SpeakAPI</span>
+          
+        </div>
+      </div>
+<div class="sb-section">
         <div class="sb-title">Quick Links</div>
         <a class="sb-item" href="https://geekthugga.github.io/mayo-infrastructure" target="_blank"><span class="sb-icon">🖥</span>MAYO App</a>
-        <a class="sb-item" href="https://n8n.srv803590.hstgr.cloud" target="_blank"><span class="sb-icon">⚡</span>n8n Dashboard</a>
+        <a class="sb-item" href="https://geekthugga.github.io/mayo-infrastructure" target="_blank"><span class="sb-icon">⚡</span>MAYO Dashboard</a>
         <a class="sb-item" href="#" onclick="switchPage('lgl',null)"><span class="sb-icon">🔍</span>Lead Gen Luxe</a>
       </div>
     </aside>
@@ -378,13 +397,79 @@ header{
       <!-- DASHBOARD -->
       <div class="page active" id="page-dashboard">
         <div class="stats-row">
-          <div class="stat b"><div class="stat-label">Active Clients</div><div class="stat-val b">4</div><div class="stat-sub">KW Legacy · A-One · CFM · ROOFNation</div></div>
+          <div class="stat b"><div class="stat-label">Active Clients</div><div class="stat-val b">4</div><div class="stat-sub">KW Legacy · A-One · CFM · ROOFNation (DBA)</div></div>
           <div class="stat a"><div class="stat-label">Pipeline</div><div class="stat-val a">5</div><div class="stat-sub">Growco · Thermal · 20/20 · Corp FM · Legacy Mortgage</div></div>
           <div class="stat r"><div class="stat-label">Delinquent</div><div class="stat-val r">1</div><div class="stat-sub">SPEC-9 · Since 11/2025</div></div>
           <div class="stat g"><div class="stat-label">Monthly MRR</div><div class="stat-val g">$11K</div><div class="stat-sub">4 active contracts</div></div>
         </div>
 
-        <!-- Recent Activity -->
+        
+        <!-- SDG Tech Stack Highlight -->
+        <div class="sec-header" style="margin-top:4px;">
+          <div class="sec-title">⚡ <span>SDG SDG Tech Tech Stack</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:28px;">
+
+          <!-- Lead Gen Luxe -->
+          <div class="card" onclick="switchPage('lgl',this)" style="cursor:pointer;border-color:rgba(0,214,143,0.2);background:linear-gradient(135deg,var(--card) 0%,rgba(0,214,143,0.04) 100%);position:relative;overflow:hidden;">
+            <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),transparent);"></div>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+              <div style="width:40px;height:40px;border-radius:10px;background:rgba(0,214,143,0.1);display:flex;align-items:center;justify-content:center;font-size:20px;">🔍</div>
+              <div>
+                <div style="font-size:15px;font-weight:800;">Lead Gen Luxe</div>
+                <div style="font-size:10px;color:var(--white3);font-family:var(--mono);margin-top:2px;">SDG Tech · Lead Generation</div>
+              </div>
+              <span style="margin-left:auto;font-size:9px;font-weight:700;padding:3px 9px;border-radius:8px;background:rgba(0,214,143,0.12);color:var(--green);border:1px solid rgba(0,214,143,0.2);font-family:var(--mono);">LIVE</span>
+            </div>
+            <div style="font-size:12px;color:var(--white2);line-height:1.6;margin-bottom:12px;">Search local businesses · Scrape contacts · Push directly to HGH CRM. Offered to all SDG clients.</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <span style="font-size:10px;padding:3px 9px;border-radius:6px;background:rgba(0,214,143,0.08);color:var(--green);font-family:var(--mono);">Lead Scraping</span>
+              <span style="font-size:10px;padding:3px 9px;border-radius:6px;background:rgba(0,214,143,0.08);color:var(--green);font-family:var(--mono);">HGH CRM Push</span>
+              
+            </div>
+          </div>
+
+          <!-- SpeakAPI -->
+          <div class="card" style="border-color:rgba(77,159,255,0.2);background:linear-gradient(135deg,var(--card) 0%,rgba(77,159,255,0.04) 100%);position:relative;overflow:hidden;">
+            <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),transparent);"></div>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+              <div style="width:40px;height:40px;border-radius:10px;background:rgba(77,159,255,0.1);display:flex;align-items:center;justify-content:center;font-size:20px;">🎙</div>
+              <div>
+                <div style="font-size:15px;font-weight:800;">SpeakAPI</div>
+                <div style="font-size:10px;color:var(--white3);font-family:var(--mono);margin-top:2px;">SDG Tech · Voice AI</div>
+              </div>
+              
+            </div>
+            <div style="font-size:12px;color:var(--white2);line-height:1.6;margin-bottom:12px;">AI-powered voice integration for client HGH accounts. Automates calls, booking confirmations, and lead follow-up.</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <span style="font-size:10px;padding:3px 9px;border-radius:6px;background:rgba(77,159,255,0.08);color:var(--blue2);font-family:var(--mono);">Voice AI</span>
+              <span style="font-size:10px;padding:3px 9px;border-radius:6px;background:rgba(77,159,255,0.08);color:var(--blue2);font-family:var(--mono);">HGH Integration</span>
+              
+            </div>
+          </div>
+
+          <!-- MAYO -->
+          <div class="card" onclick="window.open('https://geekthugga.github.io/mayo-infrastructure','_blank')" style="cursor:pointer;border-color:rgba(0,255,209,0.2);background:linear-gradient(135deg,var(--card) 0%,rgba(0,255,209,0.04) 100%);position:relative;overflow:hidden;">
+            <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#00FFD1,transparent);"></div>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+              <div style="width:40px;height:40px;border-radius:10px;background:rgba(0,255,209,0.1);display:flex;align-items:center;justify-content:center;font-size:20px;">⚡</div>
+              <div>
+                <div style="font-size:15px;font-weight:800;">MAYO</div>
+                <div style="font-size:10px;color:var(--white3);font-family:var(--mono);margin-top:2px;">SDG Tech · AI Social Automation</div>
+              </div>
+              <span style="margin-left:auto;font-size:9px;font-weight:700;padding:3px 9px;border-radius:8px;background:rgba(0,255,209,0.1);color:#00FFD1;border:1px solid rgba(0,255,209,0.2);font-family:var(--mono);">LIVE</span>
+            </div>
+            <div style="font-size:12px;color:var(--white2);line-height:1.6;margin-bottom:12px;">AI-powered social media automation. Gemini images + Claude captions posted to FB & IG. Powers ROOFNation and all SDG clients.</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <span style="font-size:10px;padding:3px 9px;border-radius:6px;background:rgba(0,255,209,0.08);color:#00FFD1;font-family:var(--mono);">AI Posting</span>
+              <span style="font-size:10px;padding:3px 9px;border-radius:6px;background:rgba(0,255,209,0.08);color:#00FFD1;font-family:var(--mono);">Multi-Client</span>
+              <span style="font-size:10px;padding:3px 9px;border-radius:6px;background:rgba(0,255,209,0.08);color:#00FFD1;font-family:var(--mono);">HGH Integration</span>
+            </div>
+          </div>
+
+        </div>
+
+<!-- Recent Activity -->
         <div class="sec-header"><div class="sec-title">⚡ <span>Recent Activity</span></div></div>
         <div class="card" style="margin-bottom:24px;">
           <div style="display:flex;flex-direction:column;gap:8px;" id="activityFeed"></div>
@@ -580,7 +665,7 @@ const CLIENTS={
       {done:false,active:true,text:'Setup Meta social promos (geo targeted)'},
       {done:false,active:true,text:'Setup Google social promos (geo targeted)'},
       {done:false,active:true,text:'CFM Security A2P'},
-      {done:false,active:true,text:'SpeakAPI → GHL Voice AI transition'},
+      {done:false,active:true,text:'SpeakAPI integration'},
       {done:false,text:'Automated social media posts (IG/FB/LinkedIn)'},
     ]
   },
@@ -618,7 +703,7 @@ const CLIENTS={
       {done:true,text:'DBA established under Spenward'},
       {done:true,text:'HGH account setup'},
       {done:true,text:'Cold email marketing launched'},
-      {done:true,text:'n8n workflow — Gemini images + GPT-4 captions'},
+      {done:true,text:'MAYO workflow — Gemini images + GPT-4 captions'},
       {done:true,text:'Telegram bot — production live'},
       {done:false,active:true,text:'MAYO app webhook integration'},
       {done:false,text:'Meta + Google ad campaigns'},
@@ -636,7 +721,7 @@ const CLIENTS={
       {done:false,text:'Website build'},
       {done:false,text:'Social media pages (IG/FB)'},
       {done:false,text:'Lead generation system'},
-      {done:false,text:'n8n MAYO workflow setup'},
+      {done:false,text:'MAYO workflow setup'},
       {done:false,text:'Campaign launch — Q2 2026'},
     ]
   },
@@ -684,7 +769,7 @@ const CLIENTS={
 };
 
 const PIPELINE_DATA=[
-  {client:'ROOFNation Solutions',service:'DBA · Social Media + n8n',mrr:'$2,750/mo',status:'Active',since:'Q1 2025',color:'var(--green)'},
+  {client:'ROOFNation Solutions',service:'SDG DBA · Social Media + MAYO',mrr:'$2,750/mo',status:'Active · DBA',since:'Q1 2025',color:'var(--blue)'},
   {client:'KW Legacy',service:'Full Service Package',mrr:'$2,750/mo',status:'Active',since:'Q1 2025',color:'var(--green)'},
   {client:'A-One Facility Services',service:'Full Service Package',mrr:'$2,750/mo',status:'Active',since:'Q2 2025',color:'var(--green)'},
   {client:'CFM Security',service:'Full Service Package',mrr:'$2,750/mo',status:'Active',since:'Q3 2025',color:'var(--green)'},
@@ -711,7 +796,7 @@ const ADDONS=[
 const TEAM_TASKS={
   tony:[
     {done:true,text:'Build MAYO Infrastructure App',owner:'TE'},
-    {done:true,text:'ROOFNation n8n workflow — production live',owner:'TE'},
+    {done:true,text:'ROOFNation MAYO workflow — production live',owner:'TE'},
     {done:false,active:true,text:'Shot Doctor workflow — end-to-end test',owner:'TE'},
     {done:false,active:true,text:'SDG Command Center build',owner:'TE'},
     {done:false,text:'Spenward A2P setup',owner:'TE'},
@@ -719,7 +804,7 @@ const TEAM_TASKS={
     {done:false,text:'Invoice updates — gross revenue with discounts',owner:'TE'},
     {done:false,text:'Spenward Cloud Storage setup',owner:'TE'},
     {done:false,text:'Use the tools to sell the tools',owner:'TE'},
-    {done:false,text:'Lead Gen Luxe — n8n workflow build',owner:'TE'},
+    {done:false,text:'Lead Gen Luxe — MAYO workflow build',owner:'TE'},
   ],
   bryant:[
     {done:true,text:'Investment into HGH + SIMG — SDG formed',owner:'BS'},
@@ -736,7 +821,7 @@ const TEAM_TASKS={
     {done:false,active:true,text:'Spenward Cloud Storage'},
     {done:false,text:'Spenward email campaigns'},
     {done:false,text:'Use the tools to sell the tools — outreach strategy'},
-    {done:false,text:'GHL Voice AI — replace SpeakAPI for CFM'},
+    {done:false,text:'SpeakAPI — CFM Security integration'},
     {done:false,text:'Lead Gen Luxe — launch for client prospecting'},
   ]
 };
@@ -745,7 +830,7 @@ const ACTIVITY=[
   {icon:'🌿',text:'Growco Landscaping — DBA activation planned for Q2 2026',time:'Q2 2026',color:'rgba(255,160,64,0.1)'},
   {icon:'❄️',text:'Thermal Exchange — HVAC DBA activation planned for Summer 2026',time:'Summer 2026',color:'rgba(255,160,64,0.1)'},
   {icon:'🏦',text:'Legacy Mutual Mortgage — reactivation talks in progress',time:'Watch',color:'rgba(255,255,255,0.05)'},
-  {icon:'🏠',text:'ROOFNation Solutions — n8n production live, MAYO webhook next',time:'Active',color:'rgba(0,214,143,0.1)'},
+  {icon:'🏠',text:'ROOFNation Solutions — MAYO production live, MAYO webhook next',time:'Active',color:'rgba(0,214,143,0.1)'},
   {icon:'🔒',text:'CFM Security — IG social media page approved',time:'Today',color:'rgba(26,143,255,0.15)'},
   {icon:'🏢',text:'A-One Facility — website + email addresses live',time:'This week',color:'rgba(0,214,143,0.1)'},
   {icon:'⚠️',text:'SPEC-9 — payment overdue since November 2025',time:'11/2025',color:'rgba(255,68,85,0.1)'},
@@ -803,9 +888,18 @@ function renderDashboard(){
 function renderAllClients(){
   const grid=document.getElementById('allClientGrid');
   if(grid.innerHTML) return;
-  Object.values(CLIENTS).forEach(c=>{
-    grid.innerHTML+=renderClientCard(c);
-  });
+  const SDG_IDS=['roofnation','growco','thermal'];
+  const clients=Object.values(CLIENTS).filter(c=>!SDG_IDS.includes(c.id));
+  const sdg=Object.values(CLIENTS).filter(c=>SDG_IDS.includes(c.id));
+  // Client cards
+  clients.forEach(c=>{grid.innerHTML+=renderClientCard(c);});
+  // SDG Companies section
+  grid.innerHTML+=`<div style="grid-column:1/-1;margin:20px 0 10px;display:flex;align-items:center;gap:10px;">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--blue2);font-family:var(--mono);">SDG Companies</div>
+    <div style="flex:1;height:1px;background:rgba(26,143,255,0.2);"></div>
+    <div style="font-size:9px;color:var(--white3);font-family:var(--mono);">Spenward DBAs — internal operations</div>
+  </div>`;
+  sdg.forEach(c=>{grid.innerHTML+=renderClientCard(c);});
 }
 
 function renderPipeline(){
@@ -1028,7 +1122,7 @@ let kanbanTasks = [
   {id:'k12',client:'CFM Security',task:'Link social sites to website',assignee:'TE',priority:'High',col:'progress'},
   {id:'k13',client:'CFM Security',task:'Meta + Google promos (geo targeted)',assignee:'BS',priority:'High',col:'progress'},
   {id:'k14',client:'CFM Security',task:'CFM A2P setup',assignee:'TE',priority:'High',col:'backlog'},
-  {id:'k15',client:'CFM Security',task:'GHL Voice AI (replace SpeakAPI)',assignee:'TE',priority:'Med',col:'backlog'},
+  {id:'k15',client:'CFM Security',task:'SpeakAPI',assignee:'TE',priority:'Med',col:'backlog'},
   // ROOFNation
   {id:'k16',client:'ROOFNation',task:'MAYO app webhook integration',assignee:'TE',priority:'High',col:'progress'},
   {id:'k17',client:'ROOFNation',task:'Meta + Google ad campaigns',assignee:'BS',priority:'Med',col:'backlog'},
@@ -1044,7 +1138,7 @@ let kanbanTasks = [
   // Done examples
   {id:'k25',client:'CFM Security',task:'Create website',assignee:'TE',priority:'High',col:'done'},
   {id:'k26',client:'A-One',task:'Create website',assignee:'TE',priority:'High',col:'done'},
-  {id:'k27',client:'ROOFNation',task:'n8n workflow — production live',assignee:'TE',priority:'High',col:'done'},
+  {id:'k27',client:'ROOFNation',task:'MAYO workflow — production live',assignee:'TE',priority:'High',col:'done'},
 ];
 
 const COLS=[
